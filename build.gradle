@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'antlr'
+}
+
+group 'org.snlab'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    maven {url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+    mavenLocal()
+    mavenCentral()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
+    antlr "org.antlr:antlr4:4.7"
+    compile group: 'com.google.guava', name: 'guava', version: '11.0.2'
+    compile group: 'org.bytedeco.javacpp-presets', name: 'llvm-platform', version: '7.0.0-1.4.3'
+}
+
+generateGrammarSource {
+    maxHeapSize = "64m"
+    arguments += ["-visitor", "-long-messages"]
+}
