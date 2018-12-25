@@ -4,9 +4,11 @@ package org.example.expr;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.PointerPointer;
 import org.example.expr.parser.ExprBaseVisitor;
 import org.example.expr.parser.ExprParser;
 
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +27,7 @@ public class ExprVistor extends ExprBaseVisitor<LLVMValueRef> {
   private int count=0;
 
   public ExprVistor() {
-    //LLVMLinkInMCJIT();
+    LLVMLinkInMCJIT();
     LLVMInitializeNativeAsmPrinter();
     LLVMInitializeNativeAsmParser();
     LLVMInitializeNativeDisassembler();
@@ -181,6 +183,11 @@ public class ExprVistor extends ExprBaseVisitor<LLVMValueRef> {
       LLVMDisposeMessage(error);
       throw new Error(err);
     }
+//    if(LLVMCreateExecutionEngineForModule(engine, mod, error) != 0) {
+//      String err = error.getString();
+//      LLVMDisposeMessage(error);
+//      throw new Error(err);
+//    }
 
     LLVMGenericValueRef exec_args = LLVMCreateGenericValueOfInt(LLVMInt32Type(), 10, 1);
     LLVMGenericValueRef exec_res = LLVMRunFunction(engine, global_func, 1, exec_args);
